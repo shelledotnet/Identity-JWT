@@ -1,0 +1,23 @@
+﻿using BuildingSecureApi.Domain;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace BuildingSecureApi.API.Extensions
+{
+    public static class ModelStateExtensions
+    {
+        public static List<string> GetErrorMessages(this ModelStateDictionary dictionary)
+        {
+            return dictionary.SelectMany(m => m.Value.Errors)
+                             .Select(m => m.ErrorMessage)
+                             .ToList();
+        }
+        public static ValidationModel ValidateResponse(this ModelStateDictionary dictionary)
+        {
+            return new ValidationModel() { Code = "57", Description = "Failed", Data = GetErrorMessages(dictionary).FirstOrDefault() };
+        }
+    }
+}
